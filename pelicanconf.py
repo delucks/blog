@@ -6,7 +6,6 @@ import os
 AUTHOR = 'Jamie Luck'
 SITENAME = "delucks' Blog"
 TAGLINE = "How can our Words be Real if our Brains aren't Real?"
-#SITEURL = 'https://blog.jamieluck.com'
 
 '''Custom theme implemented at https://github.com/delucks/pelican-solarizedhack'''
 THEME = os.path.expanduser('~/dev/pelican-solarizedhack')
