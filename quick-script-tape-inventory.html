@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- ## for client-side less
+  <link rel="stylesheet/less" type="text/css" href="./theme/css/style.less">
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/less.js/1.7.3/less.min.js" type="text/javascript"></script>
+  -->
+  <link rel="stylesheet" type="text/css" href="./theme/css/style.css">
+  <link rel="stylesheet" type="text/css" href="./theme/css/solarized-dark.css">
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Jamie Luck">
+  <meta name="description" content="Posts and writings by Jamie Luck">
+
+
+<meta name="keywords" content="svbtle-migrated, python, data, sanitization">
+
+  <title>
+    delucks' Blog
+&ndash; Quick Script: Tape Inventory  </title>
+
+</head>
+
+<body>
+  <aside>
+    <div id="user_meta">
+      <h2><a href=".">Jamie Luck</a></h2>
+      <p>How can our Words be Real if our Brains aren't Real?</p>
+      <ul>
+        <li><a href="https://jamieluck.com/" target="_blank">Homepage</a></li>
+        <li><a href="http://spicyboysauce.party/" target="_blank">Recipes</a></li>
+        <li><a href="https://github.com/delucks" target="_blank">Github</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <main>
+    <header>
+      <p>
+      <a href=".">Index</a> | <a href="./archives.html">Archives</a> | <a href="./pages/about.html">About</a>      </p>
+    </header>
+
+<article>
+  <div class="article_title">
+    <h1><a href="./quick-script-tape-inventory.html">Quick Script: Tape Inventory</a></h1>
+  </div>
+  <div class="article_meta">
+    <p>Posted on: Sat 21 May 2016</p>
+    <p>Category: <a href="./category/tech.html">Tech</a>
+ &ndash; Tags:
+      <a href="./tag/svbtle-migrated.html">svbtle-migrated</a>,      <a href="./tag/python.html">python</a>,      <a href="./tag/data.html">data</a>,      <a href="./tag/sanitization.html">sanitization</a>    </p>
+  </div>
+  <div class="article_text">
+    <p>Skills with programming can be useful in all kinds of daily life situations! I just encountered one where I was making an inventory of some cassette tapes I'm getting rid of. </p>
+<p>I jotted down the list of tapes in a quick, rough format of "artist - album", unless it was a compilation or collection, in which case I just wrote the name on the tape. </p>
+<p>I want to give this list to my relatives who will undoubtably be using spreadsheet software, so I want to munge this rough list into a nicely formatted spreadsheet for them. Let's write a quick script!!</p>
+<h2>Input</h2>
+<p>Here's a sample of my notes file:</p>
+<div class="highlight"><pre><span></span>frank sinatra - academy award winners
+the pachelbel canon and other baroque favorites
+prince and the revolution - around the world in a day
+talking heads - little creatures
+crosby, stills, &amp; nash - self-titled
+</pre></div>
+
+
+<p>I want to make sure that the following things are fixed:
+- Artists and albums are separated by commas so it's treated as a CSV
+- Self-titled albums should be replaced by the name of the band
+- The First Letter Of Every Word Should Be Capitalized
+- Compilations or collections should have their artist set to "Collection"</p>
+<p>Let's get to work!</p>
+<h2>Writing Something</h2>
+<p>I'm going to be using python, since it's my favorite language and it's easy to talk about.
+Modules I'll be using:
+- <a href="https://docs.python.org/3/library/fileinput.html"><code>fileinput</code></a> takes standard input and iterates over every line (I'll be putting the input file in through stdin)
+- <a href="https://docs.python.org/3/library/string.html#string-functions"><code>string.capwords</code></a> capitalizes the first letter of every word in a provided string</p>
+<p>I start this script out the way you usually start scripts that use <code>fileinput</code>:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fileinput</span>
+<span class="kn">from</span> <span class="nn">string</span> <span class="kn">import</span> <span class="n">capwords</span>
+
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fileinput</span><span class="o">.</span><span class="n">input</span><span class="p">():</span>
+    <span class="c1"># do stuff</span>
+</pre></div>
+
+
+<p>Now that we have access to each line of the file in a variable called <code>line</code>, let's work with lines that contain an "artist - album":</p>
+<div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fileinput</span><span class="o">.</span><span class="n">input</span><span class="p">():</span>
+    <span class="k">if</span> <span class="s1">&#39;-&#39;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+        <span class="c1"># contains artist - album</span>
+        <span class="n">sp</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+        <span class="n">artist</span> <span class="o">=</span> <span class="n">sp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">album</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sp</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">album</span> <span class="o">==</span> <span class="s1">&#39;Self Titled&#39;</span><span class="p">:</span>
+            <span class="n">album</span> <span class="o">=</span> <span class="n">artist</span>
+</pre></div>
+
+
+<p>As you can see, this handles splitting apart the album and artist portions of the line, and then sets the album name appropriately for self-titled albums. Next, we need to handle the case of a line that doesn't contain "-", a collection:</p>
+<div class="highlight"><pre><span></span>    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># some kind of collection, collaboration, etc</span>
+        <span class="n">album</span> <span class="o">=</span> <span class="n">line</span>
+        <span class="n">artist</span> <span class="o">=</span> <span class="s1">&#39;Collection&#39;</span>
+</pre></div>
+
+
+<p>Easy, the whole line is the name of the album. Now to output each line:</p>
+<div class="highlight"><pre><span></span>    <span class="k">print</span> <span class="s1">&#39;{0},{1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">capwords</span><span class="p">(</span><span class="n">artist</span><span class="p">),</span> <span class="n">capwords</span><span class="p">(</span><span class="n">album</span><span class="p">))</span>
+</pre></div>
+
+
+<p>This capitalizes the album and artist after we've decided what they're going to be. That's the end of this little script! I invoked it like:</p>
+<div class="highlight"><pre><span></span>cat tapes.txt <span class="p">|</span> python parsetapes.py <span class="p">|</span> tee tapes.csv
+</pre></div>
+
+
+<p>and there we go! A spreadsheet full of usefully parsed tape information. </p>
+<p>Thanks for reading! </p>
+<h2>The Script</h2>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fileinput</span>
+<span class="kn">from</span> <span class="nn">string</span> <span class="kn">import</span> <span class="n">capwords</span>
+
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fileinput</span><span class="o">.</span><span class="n">input</span><span class="p">():</span>
+    <span class="k">if</span> <span class="s1">&#39;-&#39;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+        <span class="c1"># contains artist - album</span>
+        <span class="n">sp</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+        <span class="n">artist</span> <span class="o">=</span> <span class="n">sp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">album</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sp</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">album</span> <span class="o">==</span> <span class="s1">&#39;Self Titled&#39;</span><span class="p">:</span>
+            <span class="n">album</span> <span class="o">=</span> <span class="n">artist</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># some kind of collection, collaboration, etc</span>
+        <span class="n">album</span> <span class="o">=</span> <span class="n">line</span>
+        <span class="n">artist</span> <span class="o">=</span> <span class="s1">&#39;Collection&#39;</span>
+    <span class="k">print</span> <span class="s1">&#39;{0},{1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">capwords</span><span class="p">(</span><span class="n">artist</span><span class="p">),</span> <span class="n">capwords</span><span class="p">(</span><span class="n">album</span><span class="p">))</span>
+</pre></div>
+  </div>
+
+
+</article>
+
+
+    <div id="ending_message">
+      <p>&copy; Jamie Luck. Built using <a href="http://getpelican.com" target="_blank">Pelican</a>. Theme by Jamie Luck on <a href="https://github.com/delucks/pelican-svbhack" target="_blank">github</a>.</p>
+    </div>
+  </main>
+</body>
+</html>

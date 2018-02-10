@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- ## for client-side less
+  <link rel="stylesheet/less" type="text/css" href="./theme/css/style.less">
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/less.js/1.7.3/less.min.js" type="text/javascript"></script>
+  -->
+  <link rel="stylesheet" type="text/css" href="./theme/css/style.css">
+  <link rel="stylesheet" type="text/css" href="./theme/css/solarized-dark.css">
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Jamie Luck">
+  <meta name="description" content="Posts and writings by Jamie Luck">
+
+
+<meta name="keywords" content="svbtle-migrated, chromebook, linux, arm">
+
+  <title>
+    delucks' Blog
+&ndash; Installing "Real" Linux on an ARM Chromebook  </title>
+
+</head>
+
+<body>
+  <aside>
+    <div id="user_meta">
+      <h2><a href=".">Jamie Luck</a></h2>
+      <p>How can our Words be Real if our Brains aren't Real?</p>
+      <ul>
+        <li><a href="https://jamieluck.com/" target="_blank">Homepage</a></li>
+        <li><a href="http://spicyboysauce.party/" target="_blank">Recipes</a></li>
+        <li><a href="https://github.com/delucks" target="_blank">Github</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <main>
+    <header>
+      <p>
+      <a href=".">Index</a> | <a href="./archives.html">Archives</a> | <a href="./pages/about.html">About</a>      </p>
+    </header>
+
+<article>
+  <div class="article_title">
+    <h1><a href="./installing-real-linux-on-arm-chromebook.html">Installing "Real" Linux on an ARM Chromebook</a></h1>
+  </div>
+  <div class="article_meta">
+    <p>Posted on: Tue 30 September 2014</p>
+    <p>Category: <a href="./category/tech.html">Tech</a>
+ &ndash; Tags:
+      <a href="./tag/svbtle-migrated.html">svbtle-migrated</a>,      <a href="./tag/chromebook.html">chromebook</a>,      <a href="./tag/linux.html">linux</a>,      <a href="./tag/arm.html">arm</a>    </p>
+  </div>
+  <div class="article_text">
+    <p>I'm the proud owner of a Samsung Chromebook, first model, the lightest and longest-lasting laptop I've ever had the pleasure of owning. It's got a dual-core ARMv7 processor at 1.7GHz, a quad-core GPU, and 2GB RAM. I've had it for a bit over a year now, during which I used the included Chrome OS to death.</p>
+<p>I figured when I was purchasing it that the Linux base of Chrome OS meant I'd be able to hack it to my heart's content. That's… less than accurate. Chrome OS has many nice features, most notably a (post developer-mode switch) root shell to the underlying operating system. This allowed me to bootstrap dnschneid/crouton and run a variety of Linux chroots. I briefly had some fun with a Kali chroot, and installed Arch in a chroot to fulfill all my Linux needs. However, the chroot opens a new X display to display any X windows, and this is a pretty severe hit on performance. After getting by with this situation for a year, I started looking into a more permanent and hackable solution for my most portable laptop.</p>
+<p>I settled on Archlinux ARM because, well, Archlinux is my favorite workstation OS right now. Also, it helps that my model of Chromebook was specifically listed on their site as a target model. I decided I'd install on the internal eMMC, as it would be significantly faster than all my USB2.0 drives, as well as much more portable. Their installation guide was okay, but I had to do a few things differently to make it work.</p>
+<h2>Installing to eMMC</h2>
+<p>I installed my system via a SD card which had the Archlinux ARM filesystem tarball unpacked on it, as described in their guide. The Archlinux ARM guide assumes that you're creating this removable drive from Chrome OS, which I did for the first step.</p>
+<p>One important part they leave out is copying over any tools you'll need to repeat the instructions from the removable drive. This includes cgpt, the ChromeOS partitioning tool. It's a statically linked executable, so you can just</p>
+<div class="highlight"><pre><span></span>sudo cp <span class="k">$(</span>which cgpt<span class="k">)</span> /path/to/my/rootfs/bin/
+</pre></div>
+
+
+<p>to get the file onto your install drive (mounted rootfs at <code>/path/to/my/rootfs/</code>). I'd also recommend keeping around copies of the Archlinux tarball, kernel, u-boot script, and nv-U-Boot generated in the guide in case anything goes wrong.</p>
+<p>After rebooting into the removable drive, I first ran into my first problem with the installation. I idiotically forgot to edit /etc/fstab and set my boot partition correctly, so the second time I booted it failed. Thankfully that was pretty easy to change from another computer, so I rebooted and installed Arch in a similar way from the removable media onto the eMMC. After finishing the install, I found the eMMC wouldn't boot whatsoever. I then realized I forgot to edit /etc/fstab/ again, not allowing the system to boot correctly.</p>
+<p>Great, so I figured I'd just boot into the Archlinux removable media and fix it. Not so easy. I started getting TONS of kernel logging messages echoed to my ttys, making typing any commands impossible. Thanks to this forum thread , I was able to silence the messages temporarily using</p>
+<div class="highlight"><pre><span></span>dmesg -n1
+</pre></div>
+
+
+<p>and permanently using the ‘quiet' kernel option on the next boot.</p>
+<p>With my logging spam taken care of, I was able to edit /etc/fstab and get the system to boot fine. I copied the cgpt binary and my other resources onto the hard drive, and kept a copy on an external drive in case I ever need to rescue the machine.</p>
+<h2>Usability</h2>
+<p>Linux on the Chromebook feels just as usable as Chrome OS. In some ways it's very difficult, yet in others I find it much more efficient.</p>
+<h3>Thorns</h3>
+<ul>
+<li>HDMI doesn't work, at least not from the ~30 minutes I spent hacking around with xrandr</li>
+<li>Audio output via alsa is clunky, but easily scriptable</li>
+<li>Battery life seems slightly less, I'd assume due to CPU tuning of Chrome OS</li>
+<li>I have no warranty anymore</li>
+</ul>
+<h3>Roses</h3>
+<ul>
+<li>Using multiple terminals at once is really easy</li>
+<li>Video framerate using the Google-developed video driver is comparable to ChromeOS performance on HTML5</li>
+<li>More software, consistent selection of good general and specific tools</li>
+<li>Have access to entire internal drive space</li>
+<li>You keep the 100GB free Google Drive space</li>
+</ul>
+<h2>Going Forward</h2>
+<p>I've been using Linux on the Chromebook for about 3 weeks now, and I've been updating this article as I work on more things with it. I really enjoy it a lot, especially since using the same window manager (herbstluftwm) between my main laptop and my Chromebook makes life slightly more efficient. I've created a new branch of my github dotfiles repo specifically for the Chromebook, and I've been customizing my configurations there to make things feel like home.</p>
+<p>Would I recommend making the switch for any *nix power user? Definitely.
+For someone who wants a smooth experience? No.</p>
+<p>But I had fun with it!</p>
+<p>Feel free to shoot me any questions you have about anything I wrote here. Contact info is on my <a href="https://jamieluck.com">homepage</a>.</p>
+  </div>
+
+
+</article>
+
+
+    <div id="ending_message">
+      <p>&copy; Jamie Luck. Built using <a href="http://getpelican.com" target="_blank">Pelican</a>. Theme by Jamie Luck on <a href="https://github.com/delucks/pelican-svbhack" target="_blank">github</a>.</p>
+    </div>
+  </main>
+</body>
+</html>

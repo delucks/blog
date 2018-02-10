@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- ## for client-side less
+  <link rel="stylesheet/less" type="text/css" href="./theme/css/style.less">
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/less.js/1.7.3/less.min.js" type="text/javascript"></script>
+  -->
+  <link rel="stylesheet" type="text/css" href="./theme/css/style.css">
+  <link rel="stylesheet" type="text/css" href="./theme/css/solarized-dark.css">
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Jamie Luck">
+  <meta name="description" content="Posts and writings by Jamie Luck">
+
+
+<meta name="keywords" content="svbtle-migrated, python, pycon, notes, conference">
+
+  <title>
+    delucks' Blog
+&ndash; Lessons from Pycon 2017  </title>
+
+</head>
+
+<body>
+  <aside>
+    <div id="user_meta">
+      <h2><a href=".">Jamie Luck</a></h2>
+      <p>How can our Words be Real if our Brains aren't Real?</p>
+      <ul>
+        <li><a href="https://jamieluck.com/" target="_blank">Homepage</a></li>
+        <li><a href="http://spicyboysauce.party/" target="_blank">Recipes</a></li>
+        <li><a href="https://github.com/delucks" target="_blank">Github</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <main>
+    <header>
+      <p>
+      <a href=".">Index</a> | <a href="./archives.html">Archives</a> | <a href="./pages/about.html">About</a>      </p>
+    </header>
+
+<article>
+  <div class="article_title">
+    <h1><a href="./lessons-from-pycon-2017.html">Lessons from Pycon 2017</a></h1>
+  </div>
+  <div class="article_meta">
+    <p>Posted on: Mon 22 May 2017</p>
+    <p>Category: <a href="./category/tech.html">Tech</a>
+ &ndash; Tags:
+      <a href="./tag/svbtle-migrated.html">svbtle-migrated</a>,      <a href="./tag/python.html">python</a>,      <a href="./tag/pycon.html">pycon</a>,      <a href="./tag/notes.html">notes</a>,      <a href="./tag/conference.html">conference</a>    </p>
+  </div>
+  <div class="article_text">
+    <p>This post describes some of the talks and things I learned at pycon this year. I got to see a limited subset of talks and I definitely missed a bunch of interesting ones- these are my favorites!</p>
+<h1>Requests Under the Hood</h1>
+<h4><a href="https://www.youtube.com/watch?v=ptbCIvve6-k">Link to Recording</a></h4>
+<p>This talk was more focused on software maintenance patterns than the <code>requests</code> library itself, which was used as an example throughout. It presented a few scenarios from the library where critical code for an infrequently-used feature was slowly added to throughout time.</p>
+<p><strong>Main takeaways</strong>:
+- The most complex, hard to modify code in a software project are the features that are used the least
+- The quick hacky fix is never temporary
+- Never hide from mistakes in your codebase, even if users don't complain about them</p>
+<h1>Rants &amp; Ruminations from 100 Job Interviews in Silicon Valley</h1>
+<h4><a href="https://www.youtube.com/watch?v=uzz5AaCWMps">Link to Recording</a></h4>
+<p>This was a great culture talk which dealt with a lack of respect shown in many common job application scenarios. The author relayed a number of relatable experiences over 100 interviews with various companies in the Bay Area.</p>
+<p><strong>Main takeaways</strong>:
+- Take-home code assignments are not a good measure of the candidate's skill
+- Most interviews don't give feedback to the candidate on what to improve, making them ultimately not valuable unless the candidate passes
+- Interviewers should know exactly what they are looking for before entering the room
+- Lowballing salary offers and interviews that pedantically focus on basics display a lack of respect for the candidate
+- The best thing to provide a candidate pre-interview is an outline of what is expected from them, with specific-enough descriptions of the problems that entails</p>
+<h1>Awesome Command-Line Tools</h1>
+<h4><a href="https://www.youtube.com/watch?v=hJhZhLg3obk">Link to Recording</a></h4>
+<p>This was a fun talk for me, being a lover of command-line interfaces. The author created tools like <code>pgcli</code> and <code>mycli</code>, which are impressively smart command-line shells for databases postgresql and mysql respectively.
+They walked through a few examples of design principles to follow when creating user interfaces for tools, and gave a few libraries that are useful for implementing this in a pythonic fashion.</p>
+<p><strong>Libraries used</strong>:
+- <a href="https://github.com/jonathanslenders/python-prompt-toolkit">python-prompt-toolkit</a>
+- <a href="http://pygments.org/">pygments</a>
+- <a href="https://github.com/pallets/click">click</a></p>
+<p><strong>Main takeaways</strong>:
+- A user focus in program design will make your program more intuitive
+- Make features of the program discoverable; don't hide them behind arcane keyboard combinations unless they make sense that way
+- Make documentation readily available from within the program
+- Configuration should be for subjective options only; unnecessary config options mean that sane defaults haven't been chosen
+- <code>python-prompt-toolkit</code> is really awesome if you are making a REPL</p>
+<h1>Satellite Imagery using Python</h1>
+<h4><a href="https://www.youtube.com/watch?v=rUUgLsspTZA">Link to Recording</a></h4>
+<h4><a href="https://github.com/kscottz/PythonFromSpace">Code</a></h4>
+<p>This was really interesting, and I would highly recommend watching the recorded talk. The presenter is good at illustrating what happens as they step through a jupyter notebook that illustrates doing cool things with satellite images, esp. animating them.</p>
+<p><strong>Main takeaways</strong>:
+- Space is a public/private shared area, most free images come from NASA/ESA/other public space agencies although commercial ones also typically have a free tier
+- Using satellite imagery requires a non-trivial amount of libraries and computing power
+- BUT, using satellite imagery is straightforward conceptually
+- The talk links to all libraries required to do this yourself</p>
+<h1>Algorithmic Music Generation</h1>
+<h4><a href="https://www.youtube.com/watch?v=Kk33YgJuDfk">Link to Recording</a></h4>
+<p><a href="https://github.com/unnati-xyz/music-generation">Code</a></p>
+<p>This talk walks through how "easy" it is to generate entirely unique music using a large training set and a recurrent neural network implemented using the <code>keras</code> library.</p>
+<p><strong>Main takeaways</strong>:
+- LSTM RNNs are the most appropriate type for this use case
+- Normalization of the input data requires translation from lossy to lossless formats
+- Many, many iterations of the training set will be required to produce anything that sounds remotely like music</p>
+<h1>Creating a Good Library API</h1>
+<h4><a href="https://www.youtube.com/watch?v=4mkFfce46zE">Link to Recording</a></h4>
+<p>I have a few python libraries and polishing their APIs is a priority at all times, I paid close attention throughout this talk. The author stated four values for writing libraries:
+- Simplicity
+- Flexibility
+- Consistency
+- Safety
+They talked about the first two and trade-offs to be made between them and ended with this quote:</p>
+<div class="highlight"><pre><span></span>An API should make the simple easy, the complex possible, and the wrong impossible
+</pre></div>
+
+
+<p><strong>Main takeaways</strong>:
+- Write your README first, describing the user experience from the beginning
+- Reduce clutter through progressive disclosure
+- Avoid cumbersome inputs (like things wrapped in lists) and required object creation just to call basic methods
+- Create abstraction to focus on the "what" over the "how"
+- Making your API granular &amp; composable helps with incorporating flexibility: can users subclass something to provide extra functionality?</p>
+<h1>Running python in the Linux Kernel with bpf</h1>
+<h4><a href="https://www.youtube.com/watch?v=CpqMroMBGP4">Link to Recording</a></h4>
+<p>This guy was a good presenter with a great sense of humor about the ridiculousness of what he managed to fit into bpf's stack-based machine. It was pretty impressive though,
+and included a strace-esque syscall notifier that was implemented in like ~50 lines.</p>
+<p><strong>Main takeaways</strong>:
+- If you reduce the amount of language features you have, you can fit a lot of python bytecode operations into a very limited transpiling target architecture
+- I can't wait for this code to be open source</p>
+<h1>Immutable programming: Writing Functional Python</h1>
+<h4><a href="https://www.youtube.com/watch?v=_OLEVvjrIj8">Link to Recording</a></h4>
+<p>This talk was an overview of different strategies one can take to program (mostly) functionally using python.
+It spent a good amount of time talking about datastructures that are useful for this purpose, and how to write Command pattern code which can take inherently mutable parts of your codebase and glue them to the immutable core of the codebase.</p>
+<p><strong>Main takeaways</strong>:
+- Immutability enables local thinking in a codebase
+- Main libraries to use when writing immutable datastructures: <code>namedtuple</code>, <code>frozenset</code>, <code>str</code> and other primitives
+- User input and other inherently mutable parts can be adapted using the Command design pattern</p>
+<h1>Grok the GIL</h1>
+<h4><a href="https://www.youtube.com/watch?v=7SSYhuk5hmc">Link to Recording</a></h4>
+<p>I liked this talk a lot. The presenter dove into the cpython codebase, pointed out situations where the GIL can be acquired and released, then walked through examples showing good places to use <code>multiprocessing</code> versus <code>threading</code>.</p>
+<p><strong>Main takeaways</strong>:
+- Python supports both preemtive and cooperative multitasking, but it's ultimately single-threaded in the reference implementation.
+- Locks are required when mutable state is used in a multithreaded environment
+- Use threads for concurrency, processes for parallelism</p>
+<h1>No Hands! Bikes with Python</h1>
+<h4><a href="https://www.youtube.com/watch?v=D-5V7s0GflU">Link to Recording</a></h4>
+<h4><a href="https://github.com/betatim/pycon17-no-hands">Code</a></h4>
+<p>This talk used the really cool <a href="https://micropython.org/">micropython project</a> to build a practical speedometer for a bike! They walked (and biked) through the whole process. I would recommend watching this if you're interested in microcontrollers.</p>
+<p><strong>Main takeaways</strong>:
+- Micropython is powerful enough to run a significant application on an Arduino-sized board
+- ESP8266 is a good board for hobbyist purposes and has onboard wifi</p>
+<h1>Hacking Cars with Python</h1>
+<h4><a href="https://www.youtube.com/watch?v=3bZNhMcv4Y8">Link to Recording</a></h4>
+<h4><a href="https://github.com/linklayer/pyvit">Code</a></h4>
+<p>This talk covered the connection between different computer components in a typical car and how to interface with its CAN network to perform different operations within the car.</p>
+<p><strong>Main takeaways</strong>:
+- Standards for cars are created to run over cheap components that are easy to mass-produce, so the protocols are fairly simple.
+- The author's library encodes these protocols so you don't have to do it</p>
+<h1>Hacking Nintendo Games in Python</h1>
+<h4><a href="https://www.youtube.com/watch?v=v75rNdPukuI">Link to Recording</a></h4>
+<p>This one was really fun. The presenter made a SMS gateway API to write memory addresses in an emulator, which led to the audience doing hilarious things with their game of Zelda.</p>
+<h1>Debugging in 3.6: Harder, Better, Faster, Stronger</h1>
+<h4><a href="https://www.youtube.com/watch?v=NdObDUbLjdg">Link to Recording</a></h4>
+<p><a href="https://github.com/Elizaveta239/frame-eval">Code</a></p>
+<p>This was another impressive talk, where the presenter made their own frame evaluation debugger for 3.6 with a new field in PyCodeObject.</p>
+<h1>Keynote on Instagram's python3 migration</h1>
+<h4><a href="https://www.youtube.com/watch?v=66XoCk79kjM">Link to Recording</a></h4>
+<p>I missed the first part of this talk, so my notes are a bit incomplete.</p>
+<p><strong>Main takeaways</strong>:
+- Unit tests for python3 compatibility are straightforward to write and act as a good measuring stick for your migration progress
+- Roll out slowly, through employee whitelists and A/B segments
+- Unicode/binary bugs can be hard to track down, and some modules have specific needs</p>
+<h1>Facts and Miscellany</h1>
+<p>This is stuff I gleaned from presentations that wasn't explicitly pointed out above.</p>
+<p>How to define default args for a namedtuple:</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="n">Rectangle</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;Rectangle&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">])</span>
+<span class="n">Rectangle</span><span class="o">.</span><span class="fm">__new__</span><span class="o">.</span><span class="vm">__defaults__</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+</pre></div>
+
+
+<p>How to allow GIL re-acquisition every tick in cpython, which makes multithreaded contention bugs easier to reproduce:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">setcheckinterval</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+
+<p>How to disassemble python into bytecode:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dis</span>
+<span class="n">dis</span><span class="o">.</span><span class="n">dis</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+  </div>
+
+
+</article>
+
+
+    <div id="ending_message">
+      <p>&copy; Jamie Luck. Built using <a href="http://getpelican.com" target="_blank">Pelican</a>. Theme by Jamie Luck on <a href="https://github.com/delucks/pelican-svbhack" target="_blank">github</a>.</p>
+    </div>
+  </main>
+</body>
+</html>

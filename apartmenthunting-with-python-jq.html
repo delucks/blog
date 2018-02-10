@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- ## for client-side less
+  <link rel="stylesheet/less" type="text/css" href="./theme/css/style.less">
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/less.js/1.7.3/less.min.js" type="text/javascript"></script>
+  -->
+  <link rel="stylesheet" type="text/css" href="./theme/css/style.css">
+  <link rel="stylesheet" type="text/css" href="./theme/css/solarized-dark.css">
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Jamie Luck">
+  <meta name="description" content="Posts and writings by Jamie Luck">
+
+
+<meta name="keywords" content="svbtle-migrated, python, jq, web-scraping">
+
+  <title>
+    delucks' Blog
+&ndash; Apartment Hunting with Python & jq  </title>
+
+</head>
+
+<body>
+  <aside>
+    <div id="user_meta">
+      <h2><a href=".">Jamie Luck</a></h2>
+      <p>How can our Words be Real if our Brains aren't Real?</p>
+      <ul>
+        <li><a href="https://jamieluck.com/" target="_blank">Homepage</a></li>
+        <li><a href="http://spicyboysauce.party/" target="_blank">Recipes</a></li>
+        <li><a href="https://github.com/delucks" target="_blank">Github</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <main>
+    <header>
+      <p>
+      <a href=".">Index</a> | <a href="./archives.html">Archives</a> | <a href="./pages/about.html">About</a>      </p>
+    </header>
+
+<article>
+  <div class="article_title">
+    <h1><a href="./apartmenthunting-with-python-jq.html">Apartment Hunting with Python & jq</a></h1>
+  </div>
+  <div class="article_meta">
+    <p>Posted on: Fri 04 September 2015</p>
+    <p>Category: <a href="./category/tech.html">Tech</a>
+ &ndash; Tags:
+      <a href="./tag/svbtle-migrated.html">svbtle-migrated</a>,      <a href="./tag/python.html">python</a>,      <a href="./tag/jq.html">jq</a>,      <a href="./tag/web-scraping.html">web-scraping</a>    </p>
+  </div>
+  <div class="article_text">
+    <p>The worst thing about finding a new apartment is the anticipation that happens during the long periods of inevitable waiting. I got pretty anxious, and decided to try to automate my stress out the window!</p>
+<p>I'm looking for apartments on Craigslist, to both save money and hopefully meet people that won't cut me up and put me in little buckets. I decided I'd write a Craigslist scraper in python using the wonderful <a href="http://www.crummy.com/software/BeautifulSoup/">beautifulsoup</a> HTML parsing library.</p>
+<p>This is essentially a data munging exercise. All the data I want (prices, location, washer and dryer combinations) are inside of this website, and whatever I write should just grab it in an organized fashion and put it into something usable. I decided that my output format would be JSON so I can query the information in a more structured way than a CSV. (Plus, a lot of the post titles contained commas, and I'm lazy!)</p>
+<h1>The Data</h1>
+<p>The starting point for our data is an index page. It looks something like this:</p>
+<p><a href="https://svbtleusercontent.com/nbrqnqghdquwkw.png"><img alt="2015-09-03-234636_641x375_scrot.png" src="https://svbtleusercontent.com/nbrqnqghdquwkw_small.png"></a></p>
+<p>Under the hood, Craigslist will probably output all of their posting data in some kind of a loop, so the source should be pretty predictable:</p>
+<p><a href="https://svbtleusercontent.com/28oyflgb3xiyjg.png"><img alt="2015-09-03-234835_660x514_scrot.png" src="https://svbtleusercontent.com/28oyflgb3xiyjg_small.png"></a></p>
+<p>Bingo! Look at all those <code>&lt;p class="row"&gt;</code>! Thankfully, with beautifulsoup, these are really easy to isolate out. I'm going to pretend for the next code block that we have some magical function called <code>get_craigslist_html()</code> that pulls down the whole HTML for that page. We'll fill in the bones on this later.</p>
+<p>With beautifulsoup, you can navigate the page's source like a tree. You can use methods like <code>find_all()</code> to pick out individual subtrees of that, which instead of being rooted at <code>&lt;html&gt;</code> are rooted at some arbitrary tag (like <code>&lt;p class="row"&gt;</code>!)</p>
+<div class="highlight"><pre><span></span><span class="n">source</span> <span class="o">=</span> <span class="n">get_craigslist_html</span><span class="p">()</span>
+<span class="n">rootsoup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">post</span> <span class="ow">in</span> <span class="n">rootsoup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="s1">&#39;row&#39;</span><span class="p">):</span>
+  <span class="c1"># do the stuff</span>
+</pre></div>
+
+
+<p>Great, now we can operate on our posts! What's inside of each of those big <code>&lt;p&gt;</code> tags?</p>
+<p><a href="https://svbtleusercontent.com/hxkzwj7nsmgtqa.png"><img alt="2015-09-03-235451_638x358_scrot.png" src="https://svbtleusercontent.com/hxkzwj7nsmgtqa_small.png"></a></p>
+<p>Ok... so now what? There's definitely some information we want in here, but where can we find it?</p>
+<p>Well, here's a few things, after looking at that source:</p>
+<table>
+<thead>
+<tr>
+<th>Information</th>
+<th>Location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Title of posting</td>
+<td>the text inside the highlighted <code>&lt;a&gt;</code> in the image above</td>
+</tr>
+<tr>
+<td>URL of the post</td>
+<td>the href of the highlighted <code>&lt;a&gt;</code></td>
+</tr>
+<tr>
+<td>Time it was posted</td>
+<td>the <code>&lt;time&gt;</code> tag inside of the <code>&lt;span class="pl"&gt;</code></td>
+</tr>
+<tr>
+<td>Rent</td>
+<td><code>&lt;span class="price"&gt;</code> inside of the <code>&lt;span class="l2"&gt;</code></td>
+</tr>
+<tr>
+<td>Location</td>
+<td><code>&lt;span class="pnr"&gt;</code>'s <code>&lt;small&gt;</code> tag</td>
+</tr>
+</tbody>
+</table>
+<p>Well, let's expand our example and try to get some of that pulled out! I'm going to put it into a python dict, because they're fast and are easily transferable to JSON!</p>
+<div class="highlight"><pre><span></span><span class="n">source</span> <span class="o">=</span> <span class="n">get_craigslist_html</span><span class="p">()</span>
+<span class="n">rootsoup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">post</span> <span class="ow">in</span> <span class="n">rootsoup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="s1">&#39;row&#39;</span><span class="p">):</span>
+  <span class="n">listing</span> <span class="o">=</span> <span class="p">{}</span>
+  <span class="n">pl_container</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">,</span> <span class="s1">&#39;pl&#39;</span><span class="p">)</span>
+  <span class="n">listing</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pl_container</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+  <span class="n">listing</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pl_container</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">)</span>
+  <span class="n">listing</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pl_container</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;datetime&#39;</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">post</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">,</span><span class="s1">&#39;price&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="n">listing</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">,</span><span class="s1">&#39;price&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+  <span class="k">if</span> <span class="n">post</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">,</span><span class="s1">&#39;pnr&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">small</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="n">loc_raw</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">,</span><span class="s1">&#39;pnr&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">small</span>
+    <span class="c1"># get rid of the surrounding () &amp; whitespace</span>
+    <span class="n">listing</span><span class="p">[</span><span class="s1">&#39;location&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">loc_raw</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+
+
+<p>How neat is that?
+<a href="https://svbtleusercontent.com/6zjkuzmkhjfwwg.jpg"><img alt="foo.jpg" src="https://svbtleusercontent.com/6zjkuzmkhjfwwg_small.jpg"></a></p>
+<p>Great, if we have one of these dictionaries per listing we can assemble them all together and query them as a group!</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_craigslist_index</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+  <span class="n">source</span> <span class="o">=</span> <span class="n">get_craigslist_html</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+  <span class="n">rootsoup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+  <span class="n">posts_from_page</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="k">for</span> <span class="n">post</span> <span class="ow">in</span> <span class="n">rootsoup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">,</span><span class="s1">&#39;row&#39;</span><span class="p">):</span>
+      <span class="k">try</span><span class="p">:</span>
+        <span class="n">listing</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">listing</span><span class="p">[</span><span class="s1">&#39;repost&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;data-repost-of&#39;</span> <span class="ow">in</span> <span class="n">post</span><span class="o">.</span><span class="n">attrs</span>
+        <span class="n">pl_container</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">,</span> <span class="s1">&#39;pl&#39;</span><span class="p">)</span>
+        <span class="n">listing</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pl_container</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+        <span class="n">listing</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pl_container</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">)</span>
+        <span class="n">listing</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pl_container</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;datetime&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">post</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">,</span><span class="s1">&#39;price&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+          <span class="n">listing</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">,</span><span class="s1">&#39;price&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">post</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">,</span><span class="s1">&#39;pnr&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">small</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+          <span class="n">loc_raw</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;span&#39;</span><span class="p">,</span><span class="s1">&#39;pnr&#39;</span><span class="p">)</span>
+          <span class="n">listing</span><span class="p">[</span><span class="s1">&#39;location&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">loc_raw</span><span class="o">.</span><span class="n">small</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">posts_from_page</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">listing</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">posts_from_page</span>
+</pre></div>
+
+
+<p>That's the general logic of the <a href="https://github.com/delucks/scripts/blob/master/cdump.py">script</a> I wrote, which does this for multiple pages until it hits a desired amount of results. </p>
+<p>Now that we have the right tool for this job, let's download some posts!</p>
+<h1>Running It</h1>
+<p><a href="https://svbtleusercontent.com/eemazwtikq8cg.png"><img alt="2015-09-03-233453_956x188_scrot.png" src="https://svbtleusercontent.com/eemazwtikq8cg_small.png"></a></p>
+<p>After running this command, all results are stored in <code>sfbay-apa.json</code>. We're now going to use the excellent command-line JSON processor <a href="https://stedolan.github.io/jq/"><code>jq</code></a> to, well, process our JSON.</p>
+<p><a href="https://svbtleusercontent.com/qrljytwa2jorw.png"><img alt="2015-09-03-233547_745x57_scrot.png" src="https://svbtleusercontent.com/qrljytwa2jorw_small.png"></a></p>
+<p>Let's say I'm looking for Craigslist-listed apartments in Sunnyvale (which I am). This is the filter string I put together to do that:</p>
+<div class="highlight"><pre><span></span>.[] | (.location==&quot;sunnyvale&quot;) then .url else empty end
+</pre></div>
+
+
+<p>The part before the pipe (<code>|</code>) will output every element of the list at the top-level of the JSON (for those of you reading along, <a href="https://github.com/delucks/scripts/blob/master/cdump.py#L61">line 61 of cdump.py</a>). This then pipes each of those into a conditional statement that checks if the <a href="https://github.com/delucks/scripts/blob/master/cdump.py#L34">"location" field of the dictionary</a> matches the string "sunnyvale". If so, it'll output the <a href="https://github.com/delucks/scripts/blob/master/cdump.py#L28">"url" field</a>, or nothing (<code>empty</code>) if not. </p>
+<p>So, this ought to output a list of URLs we'd be interested in (apartments listed on Craigslist for rent in Sunnyvale). </p>
+<p><a href="https://svbtleusercontent.com/2uk1eojgm2n8g.png"><img alt="2015-09-03-233553_895x968_scrot.png" src="https://svbtleusercontent.com/2uk1eojgm2n8g_small.png"></a> </p>
+<p>It did! Now if we set up a quick, poorly written bash loop, we can open them all at once.</p>
+<p><a href="https://svbtleusercontent.com/ea1anpsxyr6pw.png"><img alt="2015-09-03-233658_934x109_scrot.png" src="https://svbtleusercontent.com/ea1anpsxyr6pw_small.png"></a></p>
+<p>And, my web browser is surprisingly not dead.</p>
+<p><a href="https://svbtleusercontent.com/ytp4uqwrysxeg.png"><img alt="2015-09-03-233730_535x89_scrot.png" src="https://svbtleusercontent.com/ytp4uqwrysxeg_small.png"></a></p>
+<h1>Results</h1>
+<p>I spent 2+ hours doing something I could have done in 30 minutes. I'm now wallowing in the irony. </p>
+  </div>
+
+
+</article>
+
+
+    <div id="ending_message">
+      <p>&copy; Jamie Luck. Built using <a href="http://getpelican.com" target="_blank">Pelican</a>. Theme by Jamie Luck on <a href="https://github.com/delucks/pelican-svbhack" target="_blank">github</a>.</p>
+    </div>
+  </main>
+</body>
+</html>

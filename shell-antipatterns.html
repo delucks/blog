@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- ## for client-side less
+  <link rel="stylesheet/less" type="text/css" href="./theme/css/style.less">
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/less.js/1.7.3/less.min.js" type="text/javascript"></script>
+  -->
+  <link rel="stylesheet" type="text/css" href="./theme/css/style.css">
+  <link rel="stylesheet" type="text/css" href="./theme/css/solarized-dark.css">
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Jamie Luck">
+  <meta name="description" content="Posts and writings by Jamie Luck">
+
+
+<meta name="keywords" content="bash, shell, sh, programming">
+
+  <title>
+    delucks' Blog
+&ndash; Shell Antipatterns  </title>
+
+</head>
+
+<body>
+  <aside>
+    <div id="user_meta">
+      <h2><a href=".">Jamie Luck</a></h2>
+      <p>How can our Words be Real if our Brains aren't Real?</p>
+      <ul>
+        <li><a href="https://jamieluck.com/" target="_blank">Homepage</a></li>
+        <li><a href="http://spicyboysauce.party/" target="_blank">Recipes</a></li>
+        <li><a href="https://github.com/delucks" target="_blank">Github</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <main>
+    <header>
+      <p>
+      <a href=".">Index</a> | <a href="./archives.html">Archives</a> | <a href="./pages/about.html">About</a>      </p>
+    </header>
+
+<article>
+  <div class="article_title">
+    <h1><a href="./shell-antipatterns.html">Shell Antipatterns</a></h1>
+  </div>
+  <div class="article_meta">
+    <p>Posted on: Wed 24 January 2018</p>
+    <p>Category: <a href="./category/tech.html">Tech</a>
+ &ndash; Tags:
+      <a href="./tag/bash.html">bash</a>,      <a href="./tag/shell.html">shell</a>,      <a href="./tag/sh.html">sh</a>,      <a href="./tag/programming.html">programming</a>    </p>
+  </div>
+  <div class="article_text">
+    <p>I've been learning stuff about <code>bash</code> rapidly in the last several years, including better and faster ways of accomplishing common tasks. Here are some of my favorites.</p>
+<h2>Random n lines of a file</h2>
+<h4>Antipattern</h4>
+<div class="highlight"><pre><span></span>ls <span class="p">|</span> shuf <span class="p">|</span> head -n1
+</pre></div>
+
+
+<h4>Improvement</h4>
+<div class="highlight"><pre><span></span>ls <span class="p">|</span> shuf -n1
+</pre></div>
+
+
+<p>I learned this week that the venerable <code>shuf</code> utility comes with functionality to select the top "n" lines of the file produced by the last pipe step! This saves an invocation of <code>head</code> and a good bit of typing.</p>
+<h2>Filter by lines with grep, then by column with awk</h2>
+<h4>Antipattern</h4>
+<div class="highlight"><pre><span></span>ls -lt <span class="p">|</span> grep -E <span class="s1">&#39;^d&#39;</span> <span class="p">|</span> awk <span class="s1">&#39;{print $2}&#39;</span>
+</pre></div>
+
+
+<h4>Improvement</h4>
+<div class="highlight"><pre><span></span>ls -lt <span class="p">|</span> awk <span class="s1">&#39;/^d/{print $2}&#39;</span>
+</pre></div>
+
+
+<p>I did this for years until someone sat me down and explained a bit more of <code>awk</code> to me. If there was an award for <a href="http://catb.org/jargon/html/U/UUOC.html">"useless use of grep"</a>, it would go to this common shell pattern I see every day. If you're looking to filter lines by a regular expression, then filter down to a specific column, awk can take care of all of that for you. Everything inside the <code>//</code> is an extended PCRE, so you don't have to pass any flags (like <code>grep</code>) to get what you want.</p>
+<h2>Unnecessary loops</h2>
+<h4>Antipattern</h4>
+<div class="highlight"><pre><span></span>git ls-files <span class="p">|</span> <span class="k">while</span> <span class="nb">read</span> line<span class="p">;</span> <span class="k">do</span> rm <span class="s2">&quot;</span><span class="nv">$line</span><span class="s2">&quot;</span><span class="p">;</span> <span class="k">done</span>
+</pre></div>
+
+
+<h4>Improvement</h4>
+<div class="highlight"><pre><span></span>git ls-files <span class="p">|</span> xargs -L <span class="m">1</span> rm
+</pre></div>
+
+
+<p>If you're only executing a single command against each element of a bash loop, you can quickly replace your use of the loop with an <code>xargs</code> invocation. The <code>-L 1</code> flag for <code>xargs</code> allows you to process each line of input separately- exactly like a bash while loop. If you don't care about the serialization of the operations in this loop, you can parallelize it with <code>xargs -P</code></p>
+  </div>
+
+
+</article>
+
+
+    <div id="ending_message">
+      <p>&copy; Jamie Luck. Built using <a href="http://getpelican.com" target="_blank">Pelican</a>. Theme by Jamie Luck on <a href="https://github.com/delucks/pelican-svbhack" target="_blank">github</a>.</p>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- ## for client-side less
+  <link rel="stylesheet/less" type="text/css" href="./theme/css/style.less">
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/less.js/1.7.3/less.min.js" type="text/javascript"></script>
+  -->
+  <link rel="stylesheet" type="text/css" href="./theme/css/style.css">
+  <link rel="stylesheet" type="text/css" href="./theme/css/solarized-dark.css">
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Jamie Luck">
+  <meta name="description" content="Posts and writings by Jamie Luck">
+
+
+<meta name="keywords" content="short, linux">
+
+  <title>
+    delucks' Blog
+&ndash; Compiling Herbstluftwm on Debian MIPSel  </title>
+
+</head>
+
+<body>
+  <aside>
+    <div id="user_meta">
+      <h2><a href=".">Jamie Luck</a></h2>
+      <p>How can our Words be Real if our Brains aren't Real?</p>
+      <ul>
+        <li><a href="https://jamieluck.com/" target="_blank">Homepage</a></li>
+        <li><a href="http://spicyboysauce.party/" target="_blank">Recipes</a></li>
+        <li><a href="https://github.com/delucks" target="_blank">Github</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <main>
+    <header>
+      <p>
+      <a href=".">Index</a> | <a href="./archives.html">Archives</a> | <a href="./pages/about.html">About</a>      </p>
+    </header>
+
+<article>
+  <div class="article_title">
+    <h1><a href="./compiling-herbstluftwm-on-debian-mipsel.html">Compiling Herbstluftwm on Debian MIPSel</a></h1>
+  </div>
+  <div class="article_meta">
+    <p>Posted on: Wed 17 December 2014</p>
+    <p>Category: <a href="./category/tech.html">Tech</a>
+ &ndash; Tags:
+      <a href="./tag/short.html">short</a>,      <a href="./tag/linux.html">linux</a>    </p>
+  </div>
+  <div class="article_text">
+    <p>This'll be a short post about how I've gotten my favorite window manager, <a href="http://herbstluftwm.org/">herbstluftwm</a> to work properly on a 32-bit little-endian mips board under Debian GNU/Linux. The specific board I'm targeting is a <a href="http://elinux.org/MIPS_Creator_CI20">Creator CI20</a>, which I'm trying to use as a workstation at the moment. </p>
+<p>There's <a href="https://packages.debian.org/wheezy/herbstluftwm">a package</a> for herbstluftwm available in the official repositories, but it's version 0.3, which lags behind the development version by quite a bit. I use a bleeding-edge git version on my laptop, and I'm a fan of the features they've introduced recently, like a reorganized theming configuration syntax. So, I'm going to be downloading/compiling/installing from git so I can get these features.</p>
+<p>First, <code>git clone git://git.cs.fau.de/hlwm</code>. You'll need GCC and G++ version 4.7 to install, as they support the '-std=c++11' compiler option, which herbstluftwm requires. The Creator CI20's Debian distribution does not come with this compiler by default, so you'll have to install it. <code>sudo apt-get install gcc-4.7 g++-4.7</code></p>
+<p>Next, library dependencies. You'll need all these to compile.</p>
+<ul>
+<li>asciidoc (if you build the documentation)</li>
+<li>libxext-dev</li>
+<li>libx11-dev</li>
+</ul>
+<p>Then, a <code>make CC=/usr/bin/gcc-4.7 CXX=/usr/bin/g++-4.7</code> should sort you out.</p>
+<p>If you're reading this on a CI20, herbstluftwm is a great choice for a minimal window manager that won't slow down X the same way xfce and other desktop environments do. </p>
+  </div>
+
+
+</article>
+
+
+    <div id="ending_message">
+      <p>&copy; Jamie Luck. Built using <a href="http://getpelican.com" target="_blank">Pelican</a>. Theme by Jamie Luck on <a href="https://github.com/delucks/pelican-svbhack" target="_blank">github</a>.</p>
+    </div>
+  </main>
+</body>
+</html>
