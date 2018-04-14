@@ -1,0 +1,146 @@
+html {
+  background-color: white;
+  color: black;
+}
+
+#container {
+  font-family: monospace;
+  display: flex;
+  flex-direction: row-reverse;
+  position: relative;
+}
+
+#header {
+  text-align: right;
+  margin-right: 2rem;
+  flex: 1 1 auto;
+}
+
+#title {
+  font-size: 2.5rem;
+}
+
+#leftside {
+  font-family: monospace;
+  text-align: left;
+  margin-left: 2rem;
+  flex: 1 1 auto;
+}
+
+a {
+  text-decoration: none;
+  color: darkblue;
+}
+
+#leftside a {
+  font-family: monospace;
+}
+
+#leftside ul {
+  list-style: none;
+  font-family: sans-serif;
+  font-size: 1.2rem;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+h2 a {
+  color: blue;
+}
+
+#leftside h2 a {
+  color: black;
+}
+
+/* 
+ * This content div is the block which all page content will be placed into, below
+ * the header. It'll have a blue line around the top and left sides, and contain a
+ * "listsection" div which will be highlighted with a red line around the bottom and right sides
+ */
+
+#content {
+  display: flex;
+  flex-direction: column;
+  /* Padding only on the left side */
+  padding-left: 1rem;
+  /* This must be the same as title margin-right */
+  margin-left: 2rem;
+  margin-right: 2rem;
+  border-left: 1rem groove blue;
+  border-top: 1rem groove blue;
+}
+
+/*
+ * Highlighted on the bottom and right. This div can be used
+ * by itself to complete the theming of a page, or with multiple
+ * child divs to create a summary, article, or page content
+ */
+
+.listsection {
+  flex: 1 1 auto;
+  border-bottom: 1rem ridge red;
+  border-right: 1rem ridge red;
+  /* Some room between the drawn box & content */
+  padding-right: 1rem;
+  margin-top: 1rem;
+}
+
+.listsectionheader {
+  font-family: sans-serif;
+  font-size: 2rem;
+  color: blue;
+  margin: 0 0 0 0;
+}
+
+.articletitle {
+  font-size: 2.5rem;
+}
+
+#firstarticle {
+  flex: 2 1 auto;
+}
+
+.subheader {
+  display: flex;
+  flex-direction: row;
+  font-size: 1.2rem;
+}
+
+.subheader-left {
+  flex: 1 1 auto;
+}
+
+.subheader-right {
+  flex: 1 1 auto;
+  text-align: right;
+  line-height: 1rem;
+}
+
+/* Place the left-side links under the main content */
+@media all and (max-width: 1000px) {
+  #leftside {
+    padding-left: 0;
+    margin-left: 0;
+  }
+  #header {
+    margin-right: 0;
+  }
+  .subheader {
+    flex-direction: column;
+  }
+  .subheader-right {
+    text-align: left;
+  }
+}
+
+@media all and (max-width: 600px) {
+  #container {
+    flex-direction: column;
+  }
+  #leftside {
+    text-align: center;
+  }
+  #header {
+    text-align: center;
+  }
+}

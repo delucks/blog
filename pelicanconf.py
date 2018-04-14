@@ -1,21 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*- #
 from __future__ import unicode_literals
-import os
 
 AUTHOR = 'Jamie Luck'
-SITENAME = "delucks' Blog"
-TAGLINE = "How can our Words be Real if our Brains aren't Real?"
+SITENAME = "delucks' Content"
+TAGLINE = 'Tagline Here'
 
-'''Custom theme implemented at https://github.com/delucks/pelican-solarizedhack'''
-THEME = os.path.expanduser('~/dev/pelican-solarizedhack')
+'''Custom theme implemented in this repo'''
+THEME = 'theme'
 DISPLAY_PAGES_ON_MENU = False
 
 PATH = 'content'
 LOAD_CONTENT_CACHE=False
 
-#TIMEZONE = 'US/Eastern'
-TIMEZONE = 'Etc/UTC'
+TIMEZONE = 'US/Eastern'
 
 DEFAULT_LANG = 'en'
 
@@ -26,25 +24,16 @@ TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
 
-# Blogroll
+# Links to show on the top-left hand corner of the main page
 LINKS = (
-    ('Homepage', 'https://jamieluck.com/'),
+    ('CLI', 'https://cli.jamieluck.com'),
+    ('Github', 'https://github.com/delucks'),
+    ('R&eacute;sum&eacute;', '/theme/JamesLuckResume.pdf?v=20160510'),
     ('Recipes', 'http://spicyboysauce.party/'),
-    ('Github', 'https://github.com/delucks')
+    ('LinkedIn', 'https://linkedin.com/in/jamieluck')
 )
-
-# Social widget
-SOCIAL = ()
 
 DEFAULT_PAGINATION = 10
 
 # Uncomment following line if you want document-relative URLs when developing
 RELATIVE_URLS = True
-
-'''
-Other Nice Themes:
-    svbhack
-    cebong
-    clean-blog
-    SoMA{,2}
-'''

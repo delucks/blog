@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block leftheader %}
+<ul>
+  {% for name, link in LINKS %}
+  <li><a href="{{ link }}" target="_blank">{{ name }}</a></li>
+  {% endfor %}
+</ul>
+{% endblock %}
+
+{% block content %}
+<div id="content">
+{% for article in articles_page.object_list %}
+{% if loop.first %}
+<div class="listsection" id="firstarticle">
+{% else %}
+<div class="listsection">
+{% endif %}
+  <h4 class="listsectionheader"><a href="/{{ article.url }}">{{ article.title }}</a></h4>
+  <p class="listsectioncontent">
+    {{ article.summary }}
+  </p> <!-- listsectioncontent -->
+</div> <!-- listsection -->
+{% endfor %}
+</div> <!-- content -->
+{% endblock %}
+
+{% block footer %}
+<footer>
+  {% include "modules/pagination.html" %}
+</footer>
+{% endblock %}

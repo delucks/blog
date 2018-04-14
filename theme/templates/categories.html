@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}&ndash; Categories{% endblock %}
+{% block leftheader %}
+<h2 class="articletitle">Categories</h2>
+{% endblock %}
+
+{% block content %}
+<div id="content">
+  <div class="listsection">
+    <ul>
+      {% for category, articles in categories|sort %}
+      <li><a href="{{ SITEURL }}/{{ category.url }}">{{ category }}</a> ({{ articles|count }})</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

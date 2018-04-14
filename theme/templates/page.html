@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}&ndash; {{ page.title }}{% endblock %}
+{% block leftheader %}
+<h2 class="articletitle"><a href="{{ SITEURL }}/{{ page.url }}">{{ page.title }}</a></h2>
+{% endblock %}
+
+{% block content %}
+<div id="content">
+  <div class="listsection">
+    <div class="subheader">
+      <div class="subheader-right">
+        <p>Updated on: {{ page.locale_date }}</p>
+      </div>
+    </div>
+    {{ page.content }}
+  </div>
+</div>
+{% endblock %}
