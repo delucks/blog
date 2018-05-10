@@ -3,7 +3,6 @@
 <meta name="keywords" content="{{ article.tags|join(', ')  }}">
 {% endblock %}
 {% block leftheader %}
-<h2 class="articletitle"><a href="/{{ article.url }}">{{ article.title }}</a></h2>
 {% endblock %}
 
 {% block title %}&ndash; {{ article.title }}{% endblock %}
@@ -13,6 +12,7 @@
   <div class="listsection">
     <div class="subheader">
       <div class="subheader-left">
+        <h2 class="articletitle"><a href="/{{ article.url }}">{{ article.title }}</a></h2>
         <p><b>{{ article.summary }}</b></p>
       </div> <!-- subheader-left -->
       <div class="subheader-right">

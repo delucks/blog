@@ -5,6 +5,7 @@ Category: Tech
 Tags: short,linux
 Slug: compiling-herbstluftwm-on-debian-mipsel
 Author: Jamie Luck
+Summary: Building the herbstluftwm window manager on a Debian MIPS32 dev board
 
 This'll be a short post about how I've gotten my favorite window manager, [herbstluftwm](http://herbstluftwm.org/) to work properly on a 32-bit little-endian mips board under Debian GNU/Linux. The specific board I'm targeting is a [Creator CI20](http://elinux.org/MIPS_Creator_CI20), which I'm trying to use as a workstation at the moment. 
 

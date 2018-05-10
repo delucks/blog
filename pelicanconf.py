@@ -3,8 +3,8 @@
 from __future__ import unicode_literals
 
 AUTHOR = 'Jamie Luck'
-SITENAME = "delucks' Content"
-TAGLINE = 'Tagline Here'
+SITENAME = "delucks' blog"
+TAGLINE = '#TODO cheeky tagline'
 
 '''Custom theme implemented in this repo'''
 THEME = 'theme'
