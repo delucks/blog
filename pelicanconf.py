@@ -28,8 +28,6 @@ AUTHOR_FEED_RSS = None
 LINKS = (
     ('CLI', 'https://cli.jamieluck.com'),
     ('Github', 'https://github.com/delucks'),
-    ('R&eacute;sum&eacute;', '/theme/JamesLuckResume.pdf?v=20160510'),
-    ('Recipes', 'http://spicyboysauce.party/'),
     ('LinkedIn', 'https://linkedin.com/in/jamieluck')
 )
 
