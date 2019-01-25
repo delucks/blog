@@ -25,7 +25,7 @@ done
 
 To quote the `help until` output, ah... fuck it, let's just include the whole thing.
 
-```
+```text
 until: until COMMANDS; do COMMANDS; done
     Execute commands as long as a test does not succeed.
     
