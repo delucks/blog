@@ -21,10 +21,6 @@ html {
   font-size: 3.0rem;
 }
 
-#title a {
-  color: #9f79ee;
-}
-
 #leftside {
   font-family: monospace;
   text-align: left;
@@ -34,7 +30,6 @@ html {
 
 a {
   text-decoration: none;
-  color: black;
 }
 
 #leftside a {
@@ -112,12 +107,10 @@ a {
 
 .subheader-left {
   flex: 1 1 auto;
-  color: #9f79ee;
 }
 
 .subheader-left h2 {
   margin: 0 0 0 0;
-  color: black;
 }
 
 .subheader-right {
