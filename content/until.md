@@ -4,6 +4,7 @@ Category: Tech
 Tags: shell
 Slug: bash-until
 Author: Jamie Luck
+Summary: Cool bash factoid of the day
 
 I've been a heavy `bash` user for years. Writing `while` loops has been part of my bash bread & butter; on systems that don't have the Linuxy `watch` command I inevitably write some kind of `while :; do date; command; sleep 10; clear; done` during my average terminal session. Today a coworker showed me about `until`, which is like `while` but the logical opposite. To illustrate what I mean, check out this bash loop that would never run:
 
