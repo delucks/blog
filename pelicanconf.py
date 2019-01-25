@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 AUTHOR = 'Jamie Luck'
 SITENAME = "delucks' blog"
-TAGLINE = '#TODO cheeky tagline'
+TAGLINE = 'Considering the source'
 
 '''Custom theme implemented in this repo'''
 THEME = 'theme'
