@@ -27,13 +27,11 @@
   <div id="container">
     <!-- These are spaced across the top of the page above the content -->
     <div id="header">
-      <h2 id="title"><a href="{{ SITEURL }}">Jamie Luck</a></h2>
+      <h2 id="title" class="glitch" data-text="James Luck"><a href="{{ SITEURL }}">Jamie Luck</a></h2>
       <h3 id="subtitle">{{ TAGLINE }}</h3>
-    </div>
-    <div id="leftside">
       {% block leftheader %}
       {% endblock %}
-    </div> <!-- leftside -->
+    </div> <!-- header -->
   </div> <!-- container -->
   {% block content %}
   {% endblock %}

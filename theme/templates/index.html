@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block leftheader %}
-<ul>
+<ul id="leftside">
   {% for name, link in LINKS %}
   <li><a href="{{ link }}" target="_blank">{{ name }}</a></li>
   {% endfor %}
