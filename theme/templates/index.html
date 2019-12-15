@@ -1,12 +1,4 @@
 {% extends "base.html" %}
-{% block leftheader %}
-<ul id="leftside">
-  {% for name, link in LINKS %}
-  <li><a href="{{ link }}" target="_blank">{{ name }}</a></li>
-  {% endfor %}
-</ul>
-{% endblock %}
-
 {% block content %}
 <div id="content">
 {% for article in articles_page.object_list %}
@@ -15,17 +7,12 @@
 {% else %}
 <div class="listsection">
 {% endif %}
-  <h4 class="listsectionheader"><a href="/{{ article.url }}">{{ article.title }}</a></h4>
+  <h2 class="listsectionheader"><a href="/{{ article.url }}">{{ article.title }}</a></h2>
   <p class="listsectioncontent">
     <b>{{ article.summary }}</b>
   </p> <!-- listsectioncontent -->
 </div> <!-- listsection -->
 {% endfor %}
 </div> <!-- content -->
-{% endblock %}
-
-{% block footer %}
-<footer>
-  {% include "modules/pagination.html" %}
-</footer>
+{% include "modules/pagination.html" %}
 {% endblock %}
