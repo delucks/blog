@@ -5,13 +5,13 @@ from __future__ import unicode_literals
 AUTHOR = 'Jamie Luck'
 SITENAME = 'Considering the Source'
 TAGLINE = "delucks' Blog"
+SITEURL = ''
 
 '''Custom theme implemented in this repo'''
 THEME = 'theme'
 DISPLAY_PAGES_ON_MENU = False
 
 PATH = 'content'
-LOAD_CONTENT_CACHE=False
 
 TIMEZONE = 'US/Eastern'
 
