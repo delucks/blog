@@ -12,10 +12,9 @@ Summary: My method and some general tips
 Throughout *ahem* some time in X4 Foundations, I've had a huge variety of success in fighting the Xenon. When I first came to X4 from X3 last year, I mostly avoided
 direct confrontation with the Xenon, preferring to try to reinforce NPC fleets in key points. This kind of response only lasts so long in **your** space sandbox where
 you want to change anything at will; so I started fighting them. At first I suffered heavy losses, especially in sector, against any Xenon capital fleet or sufficiently
-big cloud of P. It took a while before I learned the trick to fighting the Xenon's ships: overwhelming them with numbers. If the Xenon bring three capitals to the fight,
-you should have at least ten to counter them. If they bring a few dozen M and N, you should have at least 50 high-survivability fighters. The effect is especially 
-important in-sector, where combat with Xenon capitals results in higher losses than out-of-sector combat. My typical fleet size is overprovisioned to account for this;
-the more ships you have, the better their collective chances of survival and the less micromanaging you need to do in equipping replacement fleets.
+big cloud of P. It took a while before I learned the trick to fighting the Xenon's ships: overwhelming them with numbers or overwhelming them with a powerful ship. If you are new to the game and don't have the resources to do either of those strategies, you can still do it!
+
+### For New Saves
 
 If you're just starting out and don't have the resources to field a fleet, you can still handle Xenon capitals one-on-one in a M-sized ship (usually a corvette) if you have
 the right equipment. Prioritize high average damage output guns on a maneuverable ship like a Katana, Dragon, or Kuraokami- bonus points if your chosen gun ignores shields.
@@ -28,7 +27,13 @@ help.
 While you can handle a single capital, a group of capitals is a harder challenge in an M-class ship. For that purpose I'd recommend a Rattlesnake or Syn destroyer; both
 have enough damage output to take out a Xenon capital before you get too crispy.
 
-### Fleet Composition
+### Outnumbering
+
+If the Xenon bring three capitals to the fight, you should have at least ten to counter them. If they bring a few dozen M and N, you should have at least 50 high-survivability fighters. The effect is especially 
+important in-sector, where combat with Xenon capitals results in higher losses than out-of-sector combat. My typical fleet size is overprovisioned to account for this;
+the more ships you have, the better their collective chances of survival and the less micromanaging you need to do in equipping replacement fleets.
+
+#### Fleet Composition
 
 Here's an example of a single anti-Xenon fleet:
 
@@ -46,6 +51,10 @@ around the gate; I have very occasional destroyer losses using this deployment.
 In my current >10d playtime save, I have somewhere around 50 of similar fleets spread out throughout the galaxy. To keep them accounted for, I number each fleet
 (in this example, 45) and give it a unique mineral name (Ulexite). This way any given task can get mapped back to a set of mineral nicknames for which ships are
 involved.
+
+### Outgunning
+
+Just build an Asgard. A fully specc'd Asgard will tear through just about any Xenon fleet before taking any damage.
 
 ## Fighting Xenon Stations
 
